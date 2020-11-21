@@ -5,12 +5,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ahasan.file.common.messages.BaseResponse;
 import com.ahasan.file.dto.EmployeeDTO;
 import com.ahasan.file.entity.EmployeeEntity;
 import com.ahasan.file.repo.EmployeeRepo;
+
 
 @Service
 @Transactional
@@ -28,9 +31,10 @@ public class EmployeeService {
 		return copyEmployeEntityToDto(employeeEntity);
 	}
 
-	public void createOrUpdateEmployee(EmployeeDTO employeeDTO) {
+	public BaseResponse createOrUpdateEmployee(EmployeeDTO employeeDTO) {
 		EmployeeEntity employeeEntity = copyEmployeDtoToEntity(employeeDTO);
 		employeeRepo.save(employeeEntity);
+		return new BaseResponse("Data Insert sucessfully", HttpStatus.CREATED.value());
 	}
 
 	public void deleteEmployee(Long empId) {

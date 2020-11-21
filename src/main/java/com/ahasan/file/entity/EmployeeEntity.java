@@ -21,12 +21,15 @@ public class EmployeeEntity {
 	@Column(name = "emp_name")
 	private String employeeName;
 
+	@Size(max = 10, min = 1, message = "employee name field must be equal or less than {max}")
 	@Column(name = "emp_email")
 	private String employeeEmail;
 
+	@Size(max = 6, min = 1, message = "employee gender field must be equal or less than {max}")
 	@Column(name = "emp_gender")
 	private String employeeGender;
-
+	
+	@Size(max = 10, min = 1, message = "employee name field must be equal or less than {max}")
 	@Column(name = "emp_phone")
 	private String employeePhone;
 

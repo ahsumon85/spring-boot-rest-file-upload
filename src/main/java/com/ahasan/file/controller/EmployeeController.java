@@ -2,6 +2,8 @@ package com.ahasan.file.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ahasan.file.common.messages.BaseResponse;
 import com.ahasan.file.dto.EmployeeDTO;
 import com.ahasan.file.service.EmployeeService;
 
@@ -39,9 +42,9 @@ public class EmployeeController {
 	}
 
 	@PostMapping(value = { "/add", "/update" })
-	public ResponseEntity<String> createOrUpdateEmployee(@RequestBody EmployeeDTO employeeDTO) {
-		employeeService.createOrUpdateEmployee(employeeDTO);
-		return new ResponseEntity<>("Data Insert sucessfully", HttpStatus.OK);
+	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+		 BaseResponse response = employeeService.createOrUpdateEmployee(employeeDTO);
+		 return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")

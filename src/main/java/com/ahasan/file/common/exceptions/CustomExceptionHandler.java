@@ -3,6 +3,9 @@ package com.ahasan.file.common.exceptions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +39,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 
-
+	@ExceptionHandler(ConstraintViolationException.class)
+	public final ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex,
+			WebRequest request) {
+		List<String> details = ex.getConstraintViolations().parallelStream().map(e -> e.getMessage())
+				.collect(Collectors.toList());
+		ErrorResponse error = new ErrorResponse(BAD_REQUEST, details);
+		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+	}
 	
 	@ExceptionHandler(CustomDataIntegrityViolationException.class)
 	public final ResponseEntity<ErrorResponse> dataIntegrityViolationException(CustomDataIntegrityViolationException ex,
