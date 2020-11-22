@@ -28,10 +28,13 @@ public class EmployeeEntity {
 	@Size(max = 6, min = 1, message = "employee gender field must be equal or less than {max}")
 	@Column(name = "emp_gender")
 	private String employeeGender;
-	
+
 	@Size(max = 10, min = 1, message = "employee name field must be equal or less than {max}")
 	@Column(name = "emp_phone")
 	private String employeePhone;
+
+	@Column(name = "file_name")
+	private String fileName;
 
 	public Long getEmployeeId() {
 		return employeeId;
@@ -73,10 +76,12 @@ public class EmployeeEntity {
 		this.employeePhone = employeePhone;
 	}
 
-	@Override
-	public String toString() {
-		return "EmployeeEntity [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeEmail="
-				+ employeeEmail + ", employeeGender=" + employeeGender + ", employeePhone=" + employeePhone + "]";
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

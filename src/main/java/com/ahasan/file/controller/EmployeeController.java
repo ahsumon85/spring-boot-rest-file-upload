@@ -35,9 +35,9 @@ import com.ahasan.file.service.EmployeeService;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-	
-	 private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
 	@Autowired
 	private FileStorageService fileStorageService;
 
@@ -56,10 +56,13 @@ public class EmployeeController {
 		return new ResponseEntity<EmployeeDTO>(list, HttpStatus.OK);
 	}
 
-	@PostMapping(value = { "/add", "/update" })
-	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-		 BaseResponse response = employeeService.createOrUpdateEmployee(employeeDTO);
-		 return new ResponseEntity<>(response, HttpStatus.OK);
+	@PostMapping(value = { "/add", "/update" }, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@RequestParam("file") MultipartFile file,
+																@RequestParam("employeeDTO") EmployeeDTO employeeDTO) {
+//		String fileName = fileStorageService.storeFile(employeeDTO.getFile());
+//		employeeDTO.setFileName(fileName);
+		BaseResponse response = employeeService.createOrUpdateEmployee(employeeDTO);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
@@ -67,40 +70,37 @@ public class EmployeeController {
 		employeeService.deleteEmployee(id);
 		return new ResponseEntity<>("Data Delete sucessfully", HttpStatus.OK);
 	}
-	
-    @PostMapping(value =  "/uploadFile")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
-        
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/employee/downloadFile/")
-                .path(fileName)
-                .toUriString();
-        return new ResponseEntity<>(fileDownloadUri, HttpStatus.OK);
-    }
-    
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
 
-        // Try to determine file's content type
-        String contentType = null;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-            logger.info("Could not determine file type.");
-        }
+	@PostMapping(value = "/uploadFile")
+	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+		String fileName = fileStorageService.storeFile(file);
 
-        // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
-            contentType = "application/octet-stream";
-        }
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/employee/downloadFile/")
+				.path(fileName).toUriString();
+		return new ResponseEntity<>(fileDownloadUri, HttpStatus.OK);
+	}
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
-    }
+	@GetMapping("/downloadFile/{fileName:.+}")
+	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+		// Load file as Resource
+		Resource resource = fileStorageService.loadFileAsResource(fileName);
+
+		// Try to determine file's content type
+		String contentType = null;
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (IOException ex) {
+			logger.info("Could not determine file type.");
+		}
+
+		// Fallback to the default content type if type could not be determined
+		if (contentType == null) {
+			contentType = "application/octet-stream";
+		}
+
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
 
 }
