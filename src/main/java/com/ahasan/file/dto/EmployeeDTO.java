@@ -1,5 +1,7 @@
 package com.ahasan.file.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class EmployeeDTO {
 
 	private Long employeeId;
@@ -11,6 +13,8 @@ public class EmployeeDTO {
 	private String employeeGender;
 
 	private String employeePhone;
+
+	private MultipartFile file;
 
 	public Long getEmployeeId() {
 		return employeeId;
@@ -50,6 +54,14 @@ public class EmployeeDTO {
 
 	public void setEmployeePhone(String employeePhone) {
 		this.employeePhone = employeePhone;
+	}
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 
 }
