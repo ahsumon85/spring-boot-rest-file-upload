@@ -5,14 +5,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "image.file")
 public class FileStorageProperties {
 
-	private String uploadDirLocate;
+	private String uploadLocation;
 
-	public String getUploadDirLocate() {
-		return uploadDirLocate;
+	public String getUploadLocation() {
+		return uploadLocation;
 	}
 
-	public void setUploadDirLocate(String uploadDirLocate) {
-		this.uploadDirLocate = uploadDirLocate;
+	public void setUploadLocation(String uploadLocation) {
+		this.uploadLocation = uploadLocation;
 	}
 
 }
