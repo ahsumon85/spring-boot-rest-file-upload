@@ -18,7 +18,7 @@ public class EmployeeEntity {
 	private Long employeeId;
 
 	@Size(max = 10, min = 1, message = "employee name field must be equal or less than {max}")
-	@Column(name = "emp_name")
+	@Column(name = "emp_name", unique = true)
 	private String employeeName;
 
 	@Size(max = 30, min = 1, message = "employee email field must be equal or less than {max}")

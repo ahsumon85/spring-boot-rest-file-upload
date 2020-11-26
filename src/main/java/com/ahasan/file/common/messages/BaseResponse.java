@@ -9,15 +9,11 @@ public class BaseResponse {
 
 	private String message;
 
-	private int status;
-
 	BaseResponse() {
-		
 	}
 	
-	public BaseResponse(String message, int status) {
+	public BaseResponse(String message) {
 		this.message = message;
-		this.status = status;
 	}
 
 	public String getMessage() {
@@ -26,14 +22,6 @@ public class BaseResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
 	}
 
 }

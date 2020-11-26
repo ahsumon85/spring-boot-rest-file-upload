@@ -49,24 +49,22 @@ public class EmployeeController {
 		return new ResponseEntity<List<EmployeeDTO>>(list, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/find/by-id", produces = "application/json")
+	@GetMapping(value = "/find/by-id")
 	public ResponseEntity<EmployeeDTO> getEmployeeById(@RequestParam Long id) {
-		EmployeeDTO list = employeeService.findByEmpId(id);
+		EmployeeDTO list = employeeService.findByEmployeeId(id);
 		return new ResponseEntity<EmployeeDTO>(list, HttpStatus.OK);
 	}
 
-	@PostMapping(value = { "/add", "/update" }, consumes = {"multipart/form-data"})
+	@PostMapping(value = { "/add", "/update" }, consumes = "multipart/form-data")
 	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@ModelAttribute EmployeeDTO employeeDTO) {
-		String fileName = fileStorageService.storeFile(employeeDTO.getFile());
-		employeeDTO.setFileName(fileName);
 		BaseResponse response = employeeService.createOrUpdateEmployee(employeeDTO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
-	public ResponseEntity<String> deleteEmployeeById(@PathVariable("id") Long id) {
-		employeeService.deleteEmployee(id);
-		return new ResponseEntity<>("Data Delete sucessfully", HttpStatus.OK);
+	public ResponseEntity<BaseResponse> deleteEmployeeById(@PathVariable("id") Long id) {
+		BaseResponse response= employeeService.deleteEmployeeById(id);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/uploadFile")
@@ -82,7 +80,6 @@ public class EmployeeController {
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 		// Load file as Resource
 		Resource resource = fileStorageService.loadFileAsResource(fileName);
-
 		// Try to determine file's content type
 		String contentType = null;
 		try {
@@ -90,12 +87,10 @@ public class EmployeeController {
 		} catch (IOException ex) {
 			logger.info("Could not determine file type.");
 		}
-
 		// Fallback to the default content type if type could not be determined
 		if (contentType == null) {
 			contentType = "application/octet-stream";
 		}
-
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 				.body(resource);
