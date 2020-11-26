@@ -1,7 +1,9 @@
 package com.ahasan.file.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +30,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.ahasan.file.common.messages.BaseResponse;
 import com.ahasan.file.common.utils.FileStorageService;
 import com.ahasan.file.dto.EmployeeDTO;
+import com.ahasan.file.dto.UploadFileResponseDTO;
 import com.ahasan.file.service.EmployeeService;
 
 @Validated
@@ -67,13 +70,21 @@ public class EmployeeController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/uploadFile")
-	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-		String fileName = fileStorageService.storeFile(file);
-		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/employee/downloadFile/")
-				.path(fileName).toUriString();
-		return new ResponseEntity<>(fileDownloadUri, HttpStatus.OK);
-	}
+	@PostMapping("/uploadFile")
+	public UploadFileResponseDTO uploadFile(@RequestParam("file") MultipartFile file) {
+	        String fileName = fileStorageService.storeFile(file);
+	        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+	                .path("/employee/downloadFile/").path(fileName).toUriString();
+	       return new UploadFileResponseDTO(fileName, fileDownloadUri,file.getContentType(), file.getSize());
+	 }
+
+	    @PostMapping("/uploadMultipleFiles")
+	    public List<UploadFileResponseDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+	        return Arrays.asList(files)
+	                .stream()
+	                .map(file -> uploadFile(file))
+	                .collect(Collectors.toList());
+	    }
 
 	@GetMapping("/downloadFile/{fileName:.+}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
