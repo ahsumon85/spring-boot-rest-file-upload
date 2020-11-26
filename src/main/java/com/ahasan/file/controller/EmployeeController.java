@@ -70,7 +70,6 @@ public class EmployeeController {
 	@PostMapping(value = "/uploadFile")
 	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
 		String fileName = fileStorageService.storeFile(file);
-
 		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/employee/downloadFile/")
 				.path(fileName).toUriString();
 		return new ResponseEntity<>(fileDownloadUri, HttpStatus.OK);

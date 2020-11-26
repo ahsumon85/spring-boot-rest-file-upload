@@ -2,15 +2,17 @@ package com.ahasan.file.common.utils;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "file")
+@ConfigurationProperties(prefix = "image.file")
 public class FileStorageProperties {
-    private String uploadDir;
 
-    public String getUploadDir() {
-        return uploadDir;
-    }
+	private String uploadDirLocate;
 
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
-    }
+	public String getUploadDirLocate() {
+		return uploadDirLocate;
+	}
+
+	public void setUploadDirLocate(String uploadDirLocate) {
+		this.uploadDirLocate = uploadDirLocate;
+	}
+
 }
