@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +30,7 @@ import com.ahasan.file.common.utils.FileStorageService;
 import com.ahasan.file.dto.EmployeeDTO;
 import com.ahasan.file.service.EmployeeService;
 
-//@Validated
+@Validated
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -56,11 +55,10 @@ public class EmployeeController {
 		return new ResponseEntity<EmployeeDTO>(list, HttpStatus.OK);
 	}
 
-	@PostMapping(value = { "/add", "/update" }, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@RequestParam("file") MultipartFile file,
-																@RequestParam("employeeDTO") EmployeeDTO employeeDTO) {
-//		String fileName = fileStorageService.storeFile(employeeDTO.getFile());
-//		employeeDTO.setFileName(fileName);
+	@PostMapping(value = { "/add", "/update" }, consumes = {"multipart/form-data"})
+	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@ModelAttribute EmployeeDTO employeeDTO) {
+		String fileName = fileStorageService.storeFile(employeeDTO.getFile());
+		employeeDTO.setFileName(fileName);
 		BaseResponse response = employeeService.createOrUpdateEmployee(employeeDTO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
