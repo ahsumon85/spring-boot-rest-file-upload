@@ -48,8 +48,7 @@ public class EmployeeService {
 	public BaseResponse createOrUpdateEmployee(EmployeeDTO employeeDTO) {
 		try {
 			employeeDTO.setFileName(provideFileDownloadUrlFrmMultipart(employeeDTO.getFile()));
-			EmployeeEntity employeeEntity = copyEmployeeDtoToEntity(employeeDTO);
-			employeeRepo.save(employeeEntity);
+			employeeRepo.save(copyEmployeeDtoToEntity(employeeDTO));
 		} catch (DataIntegrityViolationException ex) {
 			throw new CustomDataIntegrityViolationException(ex.getCause().getCause().getMessage());
 		}
