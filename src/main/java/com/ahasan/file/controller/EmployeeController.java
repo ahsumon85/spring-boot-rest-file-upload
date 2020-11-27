@@ -28,7 +28,7 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@GetMapping(value = "/find", produces = "application/json")
+	@GetMapping(value = "/find")
 	public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
 		List<EmployeeDTO> list = employeeService.findEmpList();
 		return new ResponseEntity<List<EmployeeDTO>>(list, HttpStatus.OK);
