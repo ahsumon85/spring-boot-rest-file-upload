@@ -41,7 +41,7 @@ public class EmployeeController {
 	@PostMapping(value = { "/add", "/update" }, consumes = "multipart/form-data")
 	public ResponseEntity<String> createOrUpdateEmployee(@ModelAttribute EmployeeDTO employeeDTO) {
 		employeeService.createOrUpdateEmployee(employeeDTO);
-		return new ResponseEntity<>("Data insert sucessfully!", HttpStatus.OK);
+		return new ResponseEntity<>("Data insert sucessfully!", HttpStatus.CREATED);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
