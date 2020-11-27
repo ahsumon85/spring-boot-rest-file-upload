@@ -66,7 +66,7 @@ public class EmployeeService {
 
 	public String provideFileDownloadUrlFrmMultipart(MultipartFile file) {
 		String fileName = fileStorageService.storeFile(file);
-		return ServletUriComponentsBuilder.fromCurrentContextPath().path("/employee/downloadFile/").path(fileName)
+		return ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/").path(fileName)
 				.toUriString();
 	}
 
