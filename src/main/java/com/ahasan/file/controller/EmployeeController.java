@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ahasan.file.common.messages.BaseResponse;
 import com.ahasan.file.dto.EmployeeDTO;
 import com.ahasan.file.service.EmployeeService;
 
@@ -23,7 +22,6 @@ import com.ahasan.file.service.EmployeeService;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
-
 
 	@Autowired
 	private EmployeeService employeeService;
@@ -41,15 +39,15 @@ public class EmployeeController {
 	}
 
 	@PostMapping(value = { "/add", "/update" }, consumes = "multipart/form-data")
-	public ResponseEntity<BaseResponse> createOrUpdateEmployee(@ModelAttribute EmployeeDTO employeeDTO) {
-		BaseResponse response = employeeService.createOrUpdateEmployee(employeeDTO);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+	public ResponseEntity<String> createOrUpdateEmployee(@ModelAttribute EmployeeDTO employeeDTO) {
+		employeeService.createOrUpdateEmployee(employeeDTO);
+		return new ResponseEntity<>("Data insert sucessfully!", HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
-	public ResponseEntity<BaseResponse> deleteEmployeeById(@PathVariable("id") Long id) {
-		BaseResponse response= employeeService.deleteEmployeeById(id);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+	public ResponseEntity<String> deleteEmployeeById(@PathVariable("id") Long id) {
+		employeeService.deleteEmployeeById(id);
+		return new ResponseEntity<>("Data delete sucessfully!", HttpStatus.OK);
 	}
 
 }
