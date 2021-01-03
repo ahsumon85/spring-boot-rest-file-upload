@@ -1,20 +1,10 @@
-# Hystrix Dashboard, Swagger2 with [secure-spring-boot-microservice](https://github.com/ahsumon85/secure-spring-boot-microservice)
+# Spring Boot File Upload / Download With [spring-boot-rest-service](https://github.com/ahsumon85/spring-boot-rest-jpa-mysql)
 
 ## Overview
 
-### The architecture is composed by five services: 
+In this article, we focus on how to configure **multipart (file upload) support** in RESTful web service.
 
-   * [`micro-api-getway`](https://github.com/ahsumon85/advance-spring-boot-microservice#api-gateway-service): API Gateway created by **Zuul** that is internally uses Ribbon **Load Balancer**  and  also can monitor Hystrix stream from every API request by **Hystrix**
-
-   * [`micro-eureka-server`](https://github.com/ahsumon85/advance-spring-boot-microservice#eureka-service): Service **Registry Server** created by Eureka with  **Load Balancer** for inter-service communication 
-
-   * [`micro-auth-service`](https://github.com/ahsumon85/advance-spring-boot-microservice#authorization-service): Simple REST service created with `Spring Boot, Spring Cloud Oauth2, Spring Data JPA, MySQL` to use as an **authorization service**
-
-   * [`micro-item-service`](https://github.com/ahsumon85/advance-spring-boot-microservice#item-service---resource-service): Simple REST service created with `Spring Boot, Spring Data JPA, MySQL and swagger to test api` to use as a **resource service**
-
-   * [`micro-sales-service`](https://github.com/ahsumon85/advance-spring-boot-microservice#sales-service--resource-service): Simple REST service created with `Spring Boot, Spring Data JPA, MySQL and swagger to test api` to use as a **resource service**
-
-`Follow the link to see docker deployment with docker,docker-compose` [`dockerized-spring-boot-microservice`](https://github.com/ahsumon85/dockerized-spring-boot-microservice) 
+Spring allows us to enable this multipart support with pluggable `MultipartFile` interface. Spring provides a `MultipartFile` interface to handle HTTP multi-part requests for uploading files. Multipart-file requests break large files into smaller chunks which makes it efficient for file uploads.
 
 ### Tools you will need
 
@@ -40,8 +30,6 @@
 After successfully run then we will refresh `eureka` dashboard and make sure to run `auth`, `item`, `sales` and `gateway` on the eureka dashboard.
 
 Eureka Discovery-Service URL: `http://localhost:8761`
-
-
 
 ## Eureka Service
 
